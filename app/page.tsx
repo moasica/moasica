@@ -1,39 +1,32 @@
-import { AtSign, ChevronLeft, ChevronRight, Search } from 'lucide-react';
-import Image from 'next/image';
+'use client';
 
-import { Content, HomeFeed, Playlist, Song } from '@/util/interfaces';
+import { AtSign, Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { HomeFeed } from '@/util/interfaces';
 
 import Wordmark from '@/public/wordmark.svg';
 
 import styles from '@/styles/SearchBar.module.scss';
 import Carousel from '@/components/Carousel';
+import Loader from '@/components/Loader';
 
-export default async function Home() {
-  const f = await fetch(`http://localhost:3000/api/v1/feed`);
-  const feed: HomeFeed = await f.json();
+export default function Home() {
+  const [ chips, setChips ] = useState<string[] | undefined>(undefined);
+  const [ content, setContent ] = useState<HomeFeed['content'] | undefined>(undefined);
 
-  //const sections = feed.sections;
+  useEffect(() => {
+    (async () => {
+      const f = await fetch('/api/v1/feed');
+      const feed: HomeFeed = await f.json();
 
-  const chips = feed.chips;
-  const content = feed.content;
+      setChips(feed.chips);
+      setContent(feed.content);
+    })();
+  }, []);
 
-  // <a href={`/watch?v=${item.id}`}>{item.item_type == 'playlist' ? item.title.text : item.title}</a>
-  /*
-  {sections.map((section: any) => (
-        <div key={section.header.title.text}>
-          <h2>{section.header.title.text}</h2>
-          <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', flexFlow: 'row wrap' }}>
-            {section.contents.map((item: any) => (
-              <li key={item.id}>
-                <a href={`/watch?v=${item.id}`}>
-                  {item.item_type == 'playlist' ? <Image src={item.thumbnail[0].url} height={128} width={128} alt="Thumbnail" /> : <Image src={item.thumbnail.contents[0].url} height={128} width={128} alt="Thumbnail" />}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-        */
+  if (!content)
+    return <Loader />;
 
   return (
     <>

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, Fragment } from 'react';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Playlist, Song } from '@/util/interfaces';
 import { isPlaylistArray, isSongArray } from '@/util/is';
@@ -86,7 +87,7 @@ function SongItem({ song }: { song: Song }) {
         <p>
           {song.artist.map((artist, index) => (
             <Fragment key={artist.id}>
-              <a href={`/channel/${artist.id}`}>{artist.name}</a>
+              <Link href={`/channel/${artist.id}`}>{artist.name}</Link>
               {index < song.artist.length - 1 && (
                 index === song.artist.length - 2 ? ' & ' : ', '
               )}
@@ -101,9 +102,9 @@ function SongItem({ song }: { song: Song }) {
 function PlaylistItem({ playlist }: { playlist: Playlist }) {
   return (
     <li className={styles.carouselItem}>
-      <a href={`/playlist?list=${playlist.id}`}>
+      <Link href={`/playlist?list=${playlist.id}`}>
         <Image src={playlist.thumbnail[0].url} height={256} width={256} alt="Thumbnail" />
-      </a>
+      </Link>
 
       <div className={styles.carouselItemText}>
         <h3>{playlist.title}</h3>

@@ -37,7 +37,7 @@ export async function GET() {
                 return {
                   id: artist.channel_id,
                   name: artist.name
-                }
+                };
               }),
               album: {
                 id: item.album.id,
@@ -51,7 +51,7 @@ export async function GET() {
                 },
                 ...item.thumbnail.contents
               ]
-            }
+            };
           } else if (item.item_type === 'video') {
             return {
               type: item.item_type,
@@ -62,10 +62,10 @@ export async function GET() {
                 return {
                   id: artist.channel_id,
                   name: artist.name
-                }
+                };
               }),
               thumbnail: item.thumbnail.contents
-            }
+            };
           } else if (item.item_type === 'playlist') {
             return {
               type: item.item_type,
@@ -73,10 +73,10 @@ export async function GET() {
               title: item.title.text,
               subtitle: item.subtitle.text,
               thumbnail: item.thumbnail
-            }
+            };
           } else return undefined;
         })
-      }
+      };
     }
   });
 
@@ -95,4 +95,4 @@ const toTitleCase = (str: string) => {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
   );
-}
+};

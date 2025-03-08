@@ -1,0 +1,48 @@
+.spinner {
+  --s: 80vmin;
+
+  position: absolute;
+  left: calc(50vw - var(--s) / 2);
+  top: calc(50vh - var(--s) / 2);
+  width: var(--s);
+  height: var(--s);
+
+  > circle {
+    --r: 47px;
+    --1deg: calc(2 * pi * var(--r) / 360);
+  
+    stroke-width: calc((50% - var(--r)) * 2);
+  
+    animation: dash-anim 1400ms ease-in-out infinite, full-rotation-anim 2000ms linear infinite;
+    transform-origin: 50% 50%;
+  }
+}
+
+@keyframes dash-anim {
+  0% {
+    stroke-dasharray: 0
+      0
+      calc(2 * var(--1deg))
+      calc(358 * var(--1deg));
+  }
+  50% {
+    stroke-dasharray: 0
+      calc(35 * var(--1deg))
+      calc(290 * var(--1deg))
+      calc(35 * var(--1deg));
+  }
+  100% {
+    stroke-dasharray: 0
+      calc(358 * var(--1deg))
+      calc(2 * var(--1deg));
+  }
+}
+
+@keyframes full-rotation-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

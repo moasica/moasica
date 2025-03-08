@@ -20,8 +20,10 @@ export async function GET(
   const video = (await params).id;
 
   const videoInfo = await yt.getInfo(video, 'YTMUSIC');
-  const manifest = await videoInfo.toDash(url => { return new URL((process.env.PROXY_URI || 'http://localhost:8080') + '/?url=' + encodeURIComponent(url.toString())); });
-  
+  const manifest = await videoInfo.toDash(url => { 
+    return new URL((process.env.PROXY_URI || 'http://localhost:8080') + '/?url=' + encodeURIComponent(url.toString())); 
+  });
+
   const headers = new Headers();
   headers.set('Content-Type', 'application/xml');
   headers.set('Access-Control-Allow-Origin', '*');
