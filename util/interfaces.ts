@@ -42,3 +42,15 @@ export interface Thumbnail {
   width: number;
   height: number;
 }
+
+export interface Video {
+  id: string;
+  title: string;
+  artist: Artist[];
+  album: Album;
+  thumbnail: Thumbnail[];
+  badge: number;
+  lenght: number;
+  views: number;
+  playable: boolean;
+}
