@@ -25,6 +25,8 @@ export async function GET() {
         title: section.header!.hasKey('title') ? toTitleCase(section.header.title.text as string) : undefined,
         strapline: section.header!.hasKey('strapline') ? section.header.strapline.text : undefined,
         content: section.contents.map((item: any) => {
+          console.log(item.item_type);
+
           if (item.item_type === 'song') {
             return {
               type: item.item_type,
@@ -49,6 +51,20 @@ export async function GET() {
                 },
                 ...item.thumbnail.contents
               ]
+            }
+          } else if (item.item_type === 'video') {
+            return {
+              type: item.item_type,
+              id: item.id,
+              paylist: item.menu.items[0].text === 'Start radio' ? item.menu.items[0].endpoint.payload.playlistId : undefined,
+              title: item.title,
+              artist: item.authors.map((artist: any) => {
+                return {
+                  id: artist.channel_id,
+                  name: artist.name
+                }
+              }),
+              thumbnail: item.thumbnail.contents
             }
           } else if (item.item_type === 'playlist') {
             return {

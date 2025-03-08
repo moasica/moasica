@@ -1,22 +1,22 @@
 export interface HomeFeed {
-  chips: string[] | undefined;
-  content: (Content | undefined)[] | undefined;
+  chips?: string[];
+  content?: (Content | undefined)[];
 }
 
 export interface Content {
-  title: string | undefined;
-  strapline: string | undefined;
+  title?: string;
+  strapline?: string;
   content: (Song | Playlist | undefined)[];
 }
 
 export interface Song {
-  type: 'song';
+  type: 'song' | 'video';
   id: string;
-  paylist: string | undefined;
+  paylist?: string;
   title: string;
   artist: Artist[];
-  album: Album;
-  thumbnail: Thumbnail;
+  album?: Album;
+  thumbnail: Thumbnail[];
 }
 
 export interface Playlist {
@@ -24,7 +24,7 @@ export interface Playlist {
   id: string;
   title: string;
   subtitle: string;
-  thumbnail: Thumbnail;
+  thumbnail: Thumbnail[];
 }
 
 export interface Artist {

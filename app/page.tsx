@@ -1,11 +1,12 @@
 import { AtSign, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import Image from 'next/image';
 
-import { HomeFeed } from '@/util/interfaces';
+import { Content, HomeFeed, Playlist, Song } from '@/util/interfaces';
 
 import Wordmark from '@/public/wordmark.svg';
 
 import styles from '@/styles/SearchBar.module.scss';
+import Carousel from '@/components/Carousel';
 
 export default async function Home() {
   const f = await fetch(`http://localhost:3000/api/v1/feed`);
@@ -60,39 +61,7 @@ export default async function Home() {
         </ul>
 
         {content?.map((section) => (
-          <div key={section!.title} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-              <div>
-                {section!.strapline && <p style={{ color: 'rgba(255, 255, 255, 0.5)', marginBottom: '-4px' }}>{section!.strapline}</p>}
-                <h2 style={{ fontSize: '160%' }}>{section!.title}</h2>
-              </div>
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <button style={{ display: 'flex', padding: '4px', gap: '4px', borderRadius: '50%', border: 'none', background: 'transparent', color: '#fff', cursor: 'pointer' }}>
-                  <ChevronLeft />
-                </button>
-                <button style={{ display: 'flex', padding: '4px', gap: '4px', borderRadius: '50%', border: 'none', background: 'transparent', color: '#fff', cursor: 'pointer' }}>
-                  <ChevronRight />
-                </button>
-              </div>
-            </div>
-
-            <ul style={{ display: 'grid', gridTemplateColumns: `repeat(${section!.content.length}, 256px)`, gap: '1rem', listStyle: 'none', overflowX: 'scroll', overflowY: 'hidden', scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}>
-              {section!.content.map((item) => (
-                item && (
-                  <li key={item!.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '256px' }}>
-                    <a href={`/watch?v=${item!.id}`}>
-                      <Image src={item!.thumbnail[0]!.url} width={256} height={256} alt="Thumbnail" style={{ borderRadius: '8px' }} />
-                    </a>
-
-                    <h3>{item!.title}</h3>
-                    {item!.artist && <p>{item!.artist.map((artist) => artist.name).join(', ')}</p>}
-                    {item!.subtitle && <p>{item!.subtitle}</p>}
-                  </li>
-                )
-              ))}
-            </ul>
-          </div>
+          <Carousel key={section?.title} title={section!.title!} strapline={section!.strapline} items={section!.content} />
         ))}
       </div>
     </>
