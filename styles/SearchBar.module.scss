@@ -1,0 +1,33 @@
+.searchBar {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 600px;
+
+  padding: 0 16px;
+  gap: 16px;
+
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+
+  > input {
+    flex: 1;
+
+    padding: 12px 0;
+
+    border: none;
+
+    background: none;
+    color: #fff;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

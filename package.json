@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
     "bgutils-js": "^3.2.0",
+    "colorthief": "^2.6.0",
     "dashjs": "^5.0.0",
     "jsdom": "^26.0.0",
     "lucide-react": "^0.479.0",
     "next": "15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sharp": "^0.33.5",
     "youtubei.js": "^13.1.0"
   },
   "devDependencies": {
@@ -26,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
+    "sass": "^1.85.1",
     "typescript": "^5"
   }
 }
