@@ -53,4 +53,9 @@ export interface Video {
   lenght: number;
   views: number;
   playable: boolean;
+  playback: {
+    minReadAhead: number;
+    maxReadAhead: number;
+    readAhead: number;
+  };
 }

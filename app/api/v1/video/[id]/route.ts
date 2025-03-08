@@ -34,7 +34,7 @@ export async function GET(
   }) : [];
 
   if (badge.length > 0)
-    badge = badge.reduce((p, c) => p! + c!);
+    badge = badge.reduce((p: any, c: any) => p! + c!);
   else badge = undefined;
 
   return Response.json({
@@ -55,6 +55,11 @@ export async function GET(
     badge,
     lenght: info.basic_info.duration,
     views: info.basic_info.view_count,
-    playable: info.playability_status!.status === 'OK'
+    playable: info.playability_status!.status === 'OK',
+    playback: info.playability_status!.status === 'OK' ? {
+      maxReadAhead: info.player_config!.media_common_config.dynamic_readahead_config.max_read_ahead_media_time_ms,
+      minReadAhead: info.player_config!.media_common_config.dynamic_readahead_config.min_read_ahead_media_time_ms,
+      readAhead: info.player_config!.media_common_config.dynamic_readahead_config.read_ahead_growth_rate_ms
+    } : undefined
   });
 }

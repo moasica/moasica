@@ -25,8 +25,6 @@ export async function GET() {
         title: section.header!.hasKey('title') ? toTitleCase(section.header.title.text as string) : undefined,
         strapline: section.header!.hasKey('strapline') ? section.header.strapline.text : undefined,
         content: section.contents.map((item: any) => {
-          console.log(item.item_type);
-
           if (item.item_type === 'song') {
             return {
               type: item.item_type,

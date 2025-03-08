@@ -2,11 +2,16 @@
 
 import * as dashjs from 'dashjs';
 
+type EventType = (
+  'error' | 'abort' | 'canplay' | 'durationchange' | 'play' | 'pause' | 'ended' | 'playing' | 'progress' | 'seeked' | 'seeking' | 'stalled' | 'timeupdate' |
+  'streaminitialized'
+);
+
 class MusicPlayer {
   private src: string;
   private metadata: MediaMetadata;
 
-  private events: ((e: (Event | dashjs.BufferEvent)) => void)[] = [];
+  private events: Map<EventType, ((e: (Event | dashjs.MediaPlayerEvent)) => void)> = new Map();
 
   private audio: HTMLAudioElement;
 
@@ -16,7 +21,23 @@ class MusicPlayer {
 
   private player: dashjs.MediaPlayerClass;
 
-  constructor(src: string, metadata?: any) {
+  get duration() {
+    return this.audio.duration;
+  }
+  get playbackRate() {
+    return this.audio.playbackRate;
+  }
+  set playbackRate(value: number) {
+    this.audio.playbackRate = value;
+  }
+  get position() {
+    return this.audio.currentTime;
+  }
+  set position(value: number) {
+    this.audio.currentTime = value;
+  }
+
+  constructor(src: string, metadata?: any, buffer?: { maxReadAhead: number, minReadAhead: number, readAhead: number }) {
     this.src = src;
     this.metadata = new MediaMetadata(metadata);
 
@@ -32,15 +53,19 @@ class MusicPlayer {
       .connect(this.context.destination);
 
     this.player = dashjs.MediaPlayer().create();
+    this.player.updateSettings({
+      streaming: {
+        buffer: {
+          bufferTimeDefault: buffer?.readAhead,
+          bufferTimeAtTopQuality: buffer?.maxReadAhead,
+          bufferTimeAtTopQualityLongForm: buffer?.minReadAhead,
+          bufferToKeep: 300
+        }
+      }
+    });
     this.player.initialize(this.audio, this.src, false);
 
-    this.player.on('bufferLoaded', (e) => {
-      this.events.forEach(callback => callback(e));
-    });
-    
-    this.audio.addEventListener('progress', (e) => {
-      this.events.forEach(callback => callback(e));
-    });
+    this.player.on('streamInitialized', (e) => this.events.get('streaminitialized')?.(e));
   }
 
   setVolume(volume: number) {
@@ -59,18 +84,23 @@ class MusicPlayer {
   play() {
     this.audio.play();
     navigator.mediaSession.metadata = this.metadata;
+    navigator.mediaSession.playbackState = 'playing';
   }
 
   pause() {
     this.audio.pause();
+    navigator.mediaSession.playbackState = 'paused';
   }
 
   getBuffer() {
     return this.audio.buffered;
   }
 
-  on(event: string, callback: (e: (Event | dashjs.BufferEvent)) => void) {
-    this.events.push(callback);
+  on(event: EventType, callback: (e: (Event | dashjs.MediaPlayerEvent)) => void) {
+    this.events.set(event, callback);
+
+    if (event !== 'streaminitialized')
+      this.audio.addEventListener(event, (e) => callback(e));
   }
 }
 

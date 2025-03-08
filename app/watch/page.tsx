@@ -42,7 +42,7 @@ export default async function Watch({
       </p>
 
       <Image src={video.thumbnail[0].url} height={512} width={512} alt="Thumbnail" style={{ objectFit: 'cover' }} />
-      <Player src={`http://localhost:3000/api/v1/video/${id}/dash`} metadata={meta} />
+      <Player src={`/api/v1/video/${id}/dash`} metadata={meta} playback={video.playback} />
     </div>
   );
 }
