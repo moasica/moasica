@@ -78,9 +78,9 @@ export default function Carousel({
 function SongItem({ song }: { song: Song }) {
   return (
     <li className={styles.carouselItem}>
-      <a href={`/watch?v=${song.id}&list=${song.paylist}`}>
+      <Link href={`/watch?v=${song.id}&list=${song.paylist}`}>
         <Image src={song.thumbnail[0].url} height={256} width={256} alt="Thumbnail" />
-      </a>
+      </Link>
 
       <div className={styles.carouselItemText}>
         <h3>{song.title}</h3>

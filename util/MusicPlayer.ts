@@ -45,7 +45,7 @@ class MusicPlayer {
     this.src = src;
 
     this.audio = new Audio();
-    this.audio.autoplay = true;
+    //this.audio.autoplay = true;
 
     this.context = new AudioContext();
     this.source = this.context.createMediaElementSource(this.audio);

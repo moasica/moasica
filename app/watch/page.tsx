@@ -1,8 +1,12 @@
+import { ChevronDown, Download, Settings, Share2 } from 'lucide-react';
+
 import Player from '@/components/Player';
+
 import { Video } from '@/util/interfaces';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Fragment } from 'react';
+
+import Wordmark from '@/public/wordmark.svg';
+
+import styles from '@/styles/Watch.module.scss';
 
 export default async function Watch({
   searchParams
@@ -27,22 +31,51 @@ export default async function Watch({
     artwork: video.thumbnail.map((thumb) => { return { src: thumb.url }; })
   };
 
-  return (
-    <div>
-      <h1>{video.title}</h1>
-      <p>
-        {video.artist.map((artist, index) => (
-          <Fragment key={index}>
-            <Link href={`/channel/${artist.id}`}>{artist.name}</Link>
-            {index < video.artist.length - 1 && (
-              index === video.artist.length - 2 ? ' & ' : ', '
-            )}
-          </Fragment>
-        ))}
-      </p>
+  const c = await (await fetch(`http://localhost:3000/api/v1/colour?url=${encodeURIComponent(video.thumbnail[0].url)}`)).json();
 
-      <Image src={video.thumbnail[0].url} height={512} width={512} alt="Thumbnail" style={{ objectFit: 'cover' }} />
-      <Player src={`/api/v1/video/${id}/dash`} metadata={meta} playback={video.playback} />
+  return (
+    <div style={{ background: `linear-gradient(0deg, rgba(10, 12, 14, 0.50) 0%, rgba(10, 12, 14, 0.50) 100%), linear-gradient(120deg, ${c[0]} 15.48%, #000 107.24%)` }}>
+      <div className={styles.header}>
+        <button>
+          <ChevronDown />
+        </button>
+
+        <Wordmark className={styles.logo} viewBox="0 0 352 78" />
+
+        <div className={styles.actions}>
+          <button>
+            <Share2 />
+          </button>
+
+          <button>
+            <Download />
+          </button>
+
+          <button>
+            <Settings />
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.player}>
+        <Player src={`/api/v1/video/${id}/dash`} metadata={meta} data={video} playback={video.playback} />
+
+        <div className={styles.content}>
+          <div className={styles.tabs}>
+            <label>
+              Up Next
+            </label>
+
+            <label>
+              Lyrics
+            </label>
+
+            <label>
+              Related
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,9 @@ import childProcess from 'node:child_process';
 
 import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: [
+    '@colour-extractor/colour-extractor'
+  ],
   images: {
     remotePatterns: [
       {

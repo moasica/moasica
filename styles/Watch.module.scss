@@ -1,0 +1,72 @@
+.header {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 48px;
+
+  button {
+    display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 48px;
+    height: 48px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+    color: white;
+
+    cursor: pointer;
+
+    transition: background 250ms;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  > .logo {
+    position: absolute;
+
+    height: 32px;
+    width: auto;
+
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  > .actions {
+    display: flex;
+
+    gap: 8px;
+  }
+}
+
+.player {
+  height: calc(100svh - (3 * 48px));
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 128px;
+
+  > .content {
+    width: 512px;
+    height: 100%;
+
+    > .tabs {
+      display: flex;
+
+      gap: 16px;
+    }
+  }
+}
