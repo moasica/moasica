@@ -1,15 +1,18 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// ^ hate to do this but it's necessary for this file
+
 import * as dashjs from 'dashjs';
+// @ts-ignore
+import shaka from 'shaka-player';
 
 type EventType = (
-  'error' | 'abort' | 'canplay' | 'durationchange' | 'play' | 'pause' | 'ended' | 'playing' | 'progress' | 'seeked' | 'seeking' | 'stalled' | 'timeupdate' |
-  'streaminitialized'
+  'error' | 'abort' | 'canplay' | 'durationchange' | 'play' | 'pause' | 'ended' | 'playing' | 'progress' | 'seeked' | 'seeking' | 'stalled' | 'timeupdate'
 );
 
 class MusicPlayer {
   private src: string;
-  private metadata: MediaMetadata;
 
   private events: Map<EventType, ((e: (Event | dashjs.MediaPlayerEvent)) => void)> = new Map();
 
@@ -19,7 +22,7 @@ class MusicPlayer {
   private source: MediaElementAudioSourceNode;
   private gain: GainNode;
 
-  private player: dashjs.MediaPlayerClass;
+  private player: any;
 
   get duration() {
     return this.audio.duration;
@@ -38,8 +41,9 @@ class MusicPlayer {
   }
 
   constructor(src: string, metadata?: any, buffer?: { maxReadAhead: number, minReadAhead: number, readAhead: number }) {
+    shaka.polyfill.installAll();
+
     this.src = src;
-    this.metadata = new MediaMetadata(metadata);
 
     this.audio = new Audio();
 
@@ -52,20 +56,21 @@ class MusicPlayer {
       .connect(this.gain)
       .connect(this.context.destination);
 
-    this.player = dashjs.MediaPlayer().create();
-    this.player.updateSettings({
+    this.player = new shaka.Player();
+    this.player.configure({
       streaming: {
-        buffer: {
-          bufferTimeDefault: buffer?.readAhead,
-          bufferTimeAtTopQuality: buffer?.maxReadAhead,
-          bufferTimeAtTopQualityLongForm: buffer?.minReadAhead,
-          bufferToKeep: 300
-        }
+        segmentPrefetchLimit: buffer ? buffer.maxReadAhead / 1000 : 15,
+        bufferingGoal: buffer ? buffer.readAhead / 1000 : 1,
+        bufferBehind: 300
       }
     });
-    this.player.initialize(this.audio, this.src, false);
 
-    this.player.on('streamInitialized', (e) => this.events.get('streaminitialized')?.(e));
+    (async () => {
+      // @ts-ignore
+      await this.player.attach(this.audio);
+      // @ts-ignore
+      await this.player.load(this.src);
+    })();
   }
 
   setVolume(volume: number) {
@@ -76,20 +81,12 @@ class MusicPlayer {
     return this.gain.gain.value;
   }
 
-  setMetadata(metadata: any) {
-    this.metadata = new MediaMetadata(metadata);
-    navigator.mediaSession.metadata = this.metadata;
-  }
-
   play() {
     this.audio.play();
-    navigator.mediaSession.metadata = this.metadata;
-    navigator.mediaSession.playbackState = 'playing';
   }
 
   pause() {
     this.audio.pause();
-    navigator.mediaSession.playbackState = 'paused';
   }
 
   getBuffer() {
