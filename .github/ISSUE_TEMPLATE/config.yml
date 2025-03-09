@@ -1,0 +1,9 @@
+blank_issues_enabled: true
+
+contact_links:
+  - name: 💬 Discord
+    url: https://discord.gg/CWEApqJ6rc
+    about: Have some causal questions? Join our Discord.
+#  - name: 📚 Documentation
+#    about: Working on a project? Check out our documentation.
+#    url: https://docs.moasica.org
