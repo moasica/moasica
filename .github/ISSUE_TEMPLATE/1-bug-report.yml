@@ -1,0 +1,38 @@
+name: 🚨 Bug Report
+description: Report an issue with Moasica.
+labels: bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Please confirm the following.
+      options:
+        - label: I have checked for [existing issues](https://github.com/moasica/moasica/issues) related to my issue.
+          required: true
+        - label: I have ensured my version of Moasica is still supported.
+          required: true
+  - type: input
+    id: mv
+    attributes:
+      label: What version of Moasica are you using?
+      description: "Find this on your Moasica instance's about page."
+    validations:
+      required: true
+  - type: input
+    id: bv
+    attributes:
+      label: What version is your browser?
+      description: "Find this in ⋮ > ℹ About Chrome; or ⋮ > ? Help > About Firefox"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the issue in detail
+      description: A clear description of the issue you are encountering.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: A clear to follow guide on how to reproduce the issue.
+    validations:
+      required: true
