@@ -12,9 +12,6 @@
     "@colour-extractor/colour-extractor": "^1.0.1",
     "@svgr/webpack": "^8.1.0",
     "bgutils-js": "^3.2.0",
-    "colorthief": "^2.6.0",
-    "extract-colors": "^4.1.1",
-    "get-pixels": "^3.3.3",
     "jsdom": "^26.0.0",
     "lucide-react": "^0.479.0",
     "next": "15.2.1",
@@ -26,7 +23,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/get-pixels": "^3.3.4",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^19",

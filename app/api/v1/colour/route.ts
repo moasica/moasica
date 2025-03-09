@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     b = Math.round(b / total);
 
     return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-}
+  }
 
   return Response.json([
     averageColors(averageColor as string[]),
