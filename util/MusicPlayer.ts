@@ -3,8 +3,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // ^ hate to do this but it's necessary for this file
 
-import * as dashjs from 'dashjs';
-// @ts-ignore
+// @ts-ignore 
 import shaka from 'shaka-player';
 
 type EventType = (
@@ -14,7 +13,7 @@ type EventType = (
 class MusicPlayer {
   private src: string;
 
-  private events: Map<EventType, ((e: (Event | dashjs.MediaPlayerEvent)) => void)> = new Map();
+  private events: Map<EventType, ((e: Event) => void)> = new Map();
 
   private audio: HTMLAudioElement;
 
@@ -94,7 +93,7 @@ class MusicPlayer {
     return this.audio.buffered;
   }
 
-  on(event: EventType, callback: (e: (Event | dashjs.MediaPlayerEvent)) => void) {
+  on(event: EventType, callback: (e: Event) => void) {
     this.events.set(event, callback);
     this.audio.addEventListener(event, (e) => callback(e));
   }
