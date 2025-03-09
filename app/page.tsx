@@ -12,8 +12,10 @@ import Carousel from '@/components/Carousel';
 import Loader from '@/components/Loader';
 
 export default function Home() {
-  const [ chips, setChips ] = useState<string[] | undefined>(undefined);
-  const [ content, setContent ] = useState<HomeFeed['content'] | undefined>(undefined);
+  const [chips, setChips] = useState<string[] | undefined>(undefined);
+  const [content, setContent] = useState<HomeFeed['content'] | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     (async () => {
@@ -25,13 +27,23 @@ export default function Home() {
     })();
   }, []);
 
-  if (!content)
-    return <Loader />;
+  if (!content) return <Loader />;
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', padding: '48px' }}>
-        <Wordmark style={{ height: '32px', width: 'auto' }} viewBox="0 0 352 78" />
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '48px'
+        }}
+      >
+        <Wordmark
+          style={{ height: '32px', width: 'auto' }}
+          viewBox="0 0 352 78"
+        />
 
         <div className={styles.searchBar}>
           <Search />
@@ -46,15 +58,25 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0 48px' }}>
-        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none' }}>  
-          {chips?.map((chip) => (
-            <li key={chip}>{chip}</li>
-          ))}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          padding: '0 48px'
+        }}
+      >
+        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none' }}>
+          {chips?.map((chip) => <li key={chip}>{chip}</li>)}
         </ul>
 
         {content?.map((section) => (
-          <Carousel key={section?.title} title={section!.title!} strapline={section!.strapline} items={section!.content} />
+          <Carousel
+            key={section?.title}
+            title={section!.title!}
+            strapline={section!.strapline}
+            items={section!.content}
+          />
         ))}
       </div>
     </>

@@ -1,7 +1,19 @@
 'use client';
 
 import { useEffect, useState, useMemo, Fragment } from 'react';
-import { Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume, Volume1, Volume2, VolumeOff, VolumeX } from 'lucide-react';
+import {
+  Pause,
+  Play,
+  Repeat,
+  Shuffle,
+  SkipBack,
+  SkipForward,
+  Volume,
+  Volume1,
+  Volume2,
+  VolumeOff,
+  VolumeX
+} from 'lucide-react';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,19 +43,19 @@ interface PlayerProps {
 }
 
 export default function Player({ src, metadata, data, playback }: PlayerProps) {
-  const [ musicPlayer, setMusicPlayer ] = useState<MusicPlayer | null>(null);
+  const [musicPlayer, setMusicPlayer] = useState<MusicPlayer | null>(null);
 
-  const [ loading, setLoading ] = useState(true);
-  
-  const [ volume, setVolume ] = useState(1);
-  const [ muted, setMuted ] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const [ position, setPosition ] = useState(0);
-  const [ duration, setDuration ] = useState(data.lenght);
+  const [volume, setVolume] = useState(1);
+  const [muted, setMuted] = useState(false);
 
-  const [ playbackState, setPlaybackState ] = useState(false);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(data.lenght);
 
-  const [ isDragging, setIsDragging ] = useState(false);
+  const [playbackState, setPlaybackState] = useState(false);
+
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setMusicPlayer(new MusicPlayer(src, playback));
@@ -59,14 +71,17 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
     document.addEventListener('mouseup', () => setIsDragging(false));
   }, [isDragging]);
 
-  const actions = useMemo(() => ({
-    play: () => {
-      musicPlayer?.play();
-    },
-    pause: () => {
-      musicPlayer?.pause();
-    }
-  }), [musicPlayer]);
+  const actions = useMemo(
+    () => ({
+      play: () => {
+        musicPlayer?.play();
+      },
+      pause: () => {
+        musicPlayer?.pause();
+      }
+    }),
+    [musicPlayer]
+  );
 
   useEffect(() => {
     if (!musicPlayer) return;
@@ -87,11 +102,11 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
       musicPlayer.on('timeupdate', () => {
         setPosition(musicPlayer.position);
         setDuration(musicPlayer?.duration);
-  
+
         navigator.mediaSession.setPositionState({
           duration: musicPlayer?.duration,
           playbackRate: musicPlayer?.playbackRate,
-          position: musicPlayer?.position,
+          position: musicPlayer?.position
         });
       });
     });
@@ -121,7 +136,13 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
 
   return (
     <div className={styles.player}>
-      <Image className={styles.coverArt} src={data.thumbnail[0].url} height={512} width={512} alt="Thumbnail" />
+      <Image
+        className={styles.coverArt}
+        src={data.thumbnail[0].url}
+        height={512}
+        width={512}
+        alt="Thumbnail"
+      />
 
       <div className={styles.metadata}>
         <h1>{data.title}</h1>
@@ -129,9 +150,8 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
           {data.artist.map((artist, index) => (
             <Fragment key={index}>
               <Link href={`/channel/${artist.id}`}>{artist.name}</Link>
-              {index < data.artist.length - 1 && (
-                index === data.artist.length - 2 ? ' & ' : ', '
-              )}
+              {index < data.artist.length - 1 &&
+                (index === data.artist.length - 2 ? ' & ' : ', ')}
             </Fragment>
           ))}
         </p>
@@ -139,7 +159,11 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
 
       <div className={styles.controls}>
         <div className={styles.progress}>
-          <SeekBar duration={duration} position={position} onSeek={handlePositionChange} />
+          <SeekBar
+            duration={duration}
+            position={position}
+            onSeek={handlePositionChange}
+          />
 
           <div className={styles.time}>
             <span>{formatTime(position)}</span>
@@ -166,9 +190,19 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
             ) : (
               <>
                 {playbackState ? (
-                  <button className={styles.primaryButton} onClick={actions.pause}><Pause /></button>
+                  <button
+                    className={styles.primaryButton}
+                    onClick={actions.pause}
+                  >
+                    <Pause />
+                  </button>
                 ) : (
-                  <button className={styles.primaryButton} onClick={actions.play}><Play /></button>
+                  <button
+                    className={styles.primaryButton}
+                    onClick={actions.play}
+                  >
+                    <Play />
+                  </button>
                 )}
               </>
             )}
@@ -181,12 +215,30 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
           <div className={styles.actions}>
             <div className={styles.volume}>
               <button onClick={() => setMuted(!muted)}>
-                {!muted ? volume > 0.65 ? <Volume2 /> : volume > 0.25 ? <Volume1 /> : volume > 0 ? <Volume /> : <VolumeX /> : <VolumeOff />}
+                {!muted ? (
+                  volume > 0.65 ? (
+                    <Volume2 />
+                  ) : volume > 0.25 ? (
+                    <Volume1 />
+                  ) : volume > 0 ? (
+                    <Volume />
+                  ) : (
+                    <VolumeX />
+                  )
+                ) : (
+                  <VolumeOff />
+                )}
               </button>
 
               <div className={styles.volumePopup}>
                 <div>
-                  <SeekBar duration={1} position={volume} onSeek={(p) => { setVolume(p); }} />
+                  <SeekBar
+                    duration={1}
+                    position={volume}
+                    onSeek={(p) => {
+                      setVolume(p);
+                    }}
+                  />
                 </div>
               </div>
             </div>

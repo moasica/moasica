@@ -4,12 +4,12 @@ import type { HomeFeed } from '@/util/interfaces';
 import getPot from '@/util/pot';
 
 export async function GET() {
-  const { token, visitorData } = await getPot({ });
+  const { token, visitorData } = await getPot({});
   const yt = await Innertube.create({
     po_token: token,
     visitor_data: visitorData,
     generate_session_locally: true,
-    
+
     cache: new UniversalCache(false)
   });
 
@@ -20,16 +20,27 @@ export async function GET() {
   });
 
   const content = homeFeed.sections?.map((section) => {
-    if (section.type === 'MusicCarouselShelf' && 'header' in section && 'contents' in section) {
+    if (
+      section.type === 'MusicCarouselShelf' &&
+      'header' in section &&
+      'contents' in section
+    ) {
       return {
-        title: section.header!.hasKey('title') ? toTitleCase(section.header.title.text as string) : undefined,
-        strapline: section.header!.hasKey('strapline') ? section.header.strapline.text : undefined,
+        title: section.header!.hasKey('title')
+          ? toTitleCase(section.header.title.text as string)
+          : undefined,
+        strapline: section.header!.hasKey('strapline')
+          ? section.header.strapline.text
+          : undefined,
         content: section.contents.map((item: any) => {
           if (item.item_type === 'song') {
             return {
               type: item.item_type,
               id: item.id,
-              paylist: item.menu.items[0].text === 'Start radio' ? item.menu.items[0].endpoint.payload.playlistId : undefined,
+              paylist:
+                item.menu.items[0].text === 'Start radio'
+                  ? item.menu.items[0].endpoint.payload.playlistId
+                  : undefined,
               title: item.title,
               artist: item.artists.map((artist: any) => {
                 return {
@@ -43,7 +54,10 @@ export async function GET() {
               },
               thumbnail: [
                 {
-                  url: item.thumbnail.contents[0].url.replace(`=w${item.thumbnail.contents[0].width}-h${item.thumbnail.contents[0].height}`, '=w544-h544'),
+                  url: item.thumbnail.contents[0].url.replace(
+                    `=w${item.thumbnail.contents[0].width}-h${item.thumbnail.contents[0].height}`,
+                    '=w544-h544'
+                  ),
                   width: 544,
                   height: 544
                 },
@@ -54,7 +68,10 @@ export async function GET() {
             return {
               type: item.item_type,
               id: item.id,
-              paylist: item.menu.items[0].text === 'Start radio' ? item.menu.items[0].endpoint.payload.playlistId : undefined,
+              paylist:
+                item.menu.items[0].text === 'Start radio'
+                  ? item.menu.items[0].endpoint.payload.playlistId
+                  : undefined,
               title: item.title,
               artist: item.authors.map((artist: any) => {
                 return {
@@ -87,10 +104,7 @@ export async function GET() {
 }
 
 const toTitleCase = (str: string) => {
-  return str.replace(
-    /\w\S*/g,
-    function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    }
-  );
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
 };

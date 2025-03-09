@@ -7,7 +7,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { token, visitorData } = await getPot({ });
+  const { token, visitorData } = await getPot({});
 
   const yt = await Innertube.create({
     po_token: token,
@@ -20,8 +20,12 @@ export async function GET(
   const video = (await params).id;
 
   const videoInfo = await yt.music.getInfo(video);
-  const manifest = await videoInfo.toDash(url => { 
-    return new URL((process.env.PROXY_URI || 'http://localhost:8080') + '/?url=' + encodeURIComponent(url.toString())); 
+  const manifest = await videoInfo.toDash((url) => {
+    return new URL(
+      (process.env.PROXY_URI || 'http://localhost:8080') +
+        '/?url=' +
+        encodeURIComponent(url.toString())
+    );
   });
 
   const headers = new Headers();

@@ -11,7 +11,12 @@ interface SeekBarProps {
   onSeek: (position: number) => void;
 }
 
-export default function SeekBar({ className, duration, position, onSeek }: SeekBarProps) {
+export default function SeekBar({
+  className,
+  duration,
+  position,
+  onSeek
+}: SeekBarProps) {
   const seekbarRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
 
@@ -40,12 +45,24 @@ export default function SeekBar({ className, duration, position, onSeek }: SeekB
   };
 
   return (
-    <div className={`${styles.seekBar}${className ? ' ' + className : ''}`} ref={seekbarRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
-      <div className={styles.seekBarFilled} style={{ width: `${(position / duration) * 100}%` }}>
-        <div className={styles.seekBarThumb} onMouseDown={(e) => {
-          e.stopPropagation();
-          isDraggingRef.current = true;
-        }} />
+    <div
+      className={`${styles.seekBar}${className ? ' ' + className : ''}`}
+      ref={seekbarRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+    >
+      <div
+        className={styles.seekBarFilled}
+        style={{ width: `${(position / duration) * 100}%` }}
+      >
+        <div
+          className={styles.seekBarThumb}
+          onMouseDown={(e) => {
+            e.stopPropagation();
+            isDraggingRef.current = true;
+          }}
+        />
       </div>
     </div>
   );

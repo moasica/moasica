@@ -17,11 +17,7 @@ interface CarouselProps {
   items: (Song | Playlist | undefined)[];
 }
 
-export default function Carousel({
-  title,
-  strapline,
-  items,
-}: CarouselProps) {
+export default function Carousel({ title, strapline, items }: CarouselProps) {
   const songListRef = useRef<HTMLUListElement>(null);
 
   const scrollLeft = () => {
@@ -41,8 +37,7 @@ export default function Carousel({
     }
   };
 
-  if (!items)
-    return <p>Error: `items` is undefined.</p>;
+  if (!items) return <p>Error: `items` is undefined.</p>;
 
   return (
     <div className={styles.carousel}>
@@ -63,13 +58,13 @@ export default function Carousel({
       </div>
 
       <ul className={styles.carouselContent} ref={songListRef}>
-        {isSongArray(items) && items.map((song) => (
-          <SongItem key={song.id} song={song} />
-        ))}
+        {isSongArray(items) &&
+          items.map((song) => <SongItem key={song.id} song={song} />)}
 
-        {isPlaylistArray(items) && items.map((playlist) => (
-          <PlaylistItem key={playlist.id} playlist={playlist} />
-        ))}
+        {isPlaylistArray(items) &&
+          items.map((playlist) => (
+            <PlaylistItem key={playlist.id} playlist={playlist} />
+          ))}
       </ul>
     </div>
   );
@@ -79,7 +74,12 @@ function SongItem({ song }: { song: Song }) {
   return (
     <li className={styles.carouselItem}>
       <Link href={`/watch?v=${song.id}&list=${song.paylist}`}>
-        <Image src={song.thumbnail[0].url} height={256} width={256} alt="Thumbnail" />
+        <Image
+          src={song.thumbnail[0].url}
+          height={256}
+          width={256}
+          alt="Thumbnail"
+        />
       </Link>
 
       <div className={styles.carouselItemText}>
@@ -88,9 +88,8 @@ function SongItem({ song }: { song: Song }) {
           {song.artist.map((artist, index) => (
             <Fragment key={artist.id}>
               <Link href={`/channel/${artist.id}`}>{artist.name}</Link>
-              {index < song.artist.length - 1 && (
-                index === song.artist.length - 2 ? ' & ' : ', '
-              )}
+              {index < song.artist.length - 1 &&
+                (index === song.artist.length - 2 ? ' & ' : ', ')}
             </Fragment>
           ))}
         </p>
@@ -103,7 +102,12 @@ function PlaylistItem({ playlist }: { playlist: Playlist }) {
   return (
     <li className={styles.carouselItem}>
       <Link href={`/playlist?list=${playlist.id}`}>
-        <Image src={playlist.thumbnail[0].url} height={256} width={256} alt="Thumbnail" />
+        <Image
+          src={playlist.thumbnail[0].url}
+          height={256}
+          width={256}
+          alt="Thumbnail"
+        />
       </Link>
 
       <div className={styles.carouselItemText}>

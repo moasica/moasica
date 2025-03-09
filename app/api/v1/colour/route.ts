@@ -21,18 +21,28 @@ export async function GET(request: NextRequest) {
   }
   const extension = mimetype.split('/')[1];
 
-  await fs.writeFile(path.join(process.cwd(), 'tmp') + '/img.' + extension, Buffer.from(data));
-  const averageColor = await topColoursHex(path.join(process.cwd(), 'tmp') + '/img.' + extension);
+  await fs.writeFile(
+    path.join(process.cwd(), 'tmp') + '/img.' + extension,
+    Buffer.from(data)
+  );
+  const averageColor = await topColoursHex(
+    path.join(process.cwd(), 'tmp') + '/img.' + extension
+  );
   await fs.rm(path.join(process.cwd(), 'tmp') + '/img.' + extension);
 
   function averageColors(colors: string[]) {
     const total = colors.length;
-    let r = 0, g = 0, b = 0;
+    let r = 0,
+      g = 0,
+      b = 0;
 
-    colors.forEach(color => {
+    colors.forEach((color) => {
       let hex = color.replace(/^#/, '');
       if (hex.length === 3) {
-        hex = hex.split('').map(c => c + c).join('');
+        hex = hex
+          .split('')
+          .map((c) => c + c)
+          .join('');
       }
 
       const num = parseInt(hex, 16);
