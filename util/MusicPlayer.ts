@@ -8,7 +8,7 @@ import * as dashjs from 'dashjs';
 import shaka from 'shaka-player';
 
 type EventType = (
-  'error' | 'abort' | 'canplay' | 'durationchange' | 'play' | 'pause' | 'ended' | 'playing' | 'progress' | 'seeked' | 'seeking' | 'stalled' | 'timeupdate'
+  'error' | 'abort' | 'canplay' | 'durationchange' | 'play' | 'pause' | 'ended' | 'playing' | 'progress' | 'seeked' | 'seeking' | 'stalled' | 'timeupdate' | 'loadedmetadata'
 );
 
 class MusicPlayer {
@@ -40,12 +40,13 @@ class MusicPlayer {
     this.audio.currentTime = value;
   }
 
-  constructor(src: string, metadata?: any, buffer?: { maxReadAhead: number, minReadAhead: number, readAhead: number }) {
+  constructor(src: string, buffer?: { maxReadAhead: number, minReadAhead: number, readAhead: number }) {
     shaka.polyfill.installAll();
 
     this.src = src;
 
     this.audio = new Audio();
+    this.audio.autoplay = true;
 
     this.context = new AudioContext();
     this.source = this.context.createMediaElementSource(this.audio);
@@ -82,7 +83,7 @@ class MusicPlayer {
   }
 
   play() {
-    this.audio.play();
+    this.audio.play().catch((e) => console.error(e));
   }
 
   pause() {
@@ -95,9 +96,7 @@ class MusicPlayer {
 
   on(event: EventType, callback: (e: (Event | dashjs.MediaPlayerEvent)) => void) {
     this.events.set(event, callback);
-
-    if (event !== 'streaminitialized')
-      this.audio.addEventListener(event, (e) => callback(e));
+    this.audio.addEventListener(event, (e) => callback(e));
   }
 }
 
