@@ -5,33 +5,33 @@ import { BG } from 'bgutils-js';
 
 const rk = 'O43z0dpjhgX20SCx4KAo';
 const getVisitorData = async (userAgent: string): Promise<string> => {
-  const html = await (await fetch("https://music.youtube.com/", { headers: { 'User-Agent': userAgent } })).text();
+  const html = await (await fetch('https://music.youtube.com/', { headers: { 'User-Agent': userAgent } })).text();
   const dom = new JSDOM(html);
 
-  const scripts = dom.window.document.querySelectorAll("script[nonce]");
+  const scripts = dom.window.document.querySelectorAll('script[nonce]');
 
   let ytcfg = null;
   scripts.forEach(script => {
-    if (!script.innerHTML.includes("visitorData")) return;
-		if (script.innerHTML.includes("ytInitialData")) return;
+    if (!script.innerHTML.includes('visitorData')) return;
+    if (script.innerHTML.includes('ytInitialData')) return;
 
     ytcfg = JSON.parse(
       script
         .innerHTML
-        .split("ytcfg.set(")[1]
-        .split(");")[0]
+        .split('ytcfg.set(')[1]
+        .split(');')[0]
     );
   });
-  if (!ytcfg) throw new Error("Could not find visitorData!");
+  if (!ytcfg) throw new Error('Could not find visitorData!');
 
   const visitorData = ytcfg['INNERTUBE_CONTEXT']['client']['visitorData'];
-  if (!visitorData) throw new Error("Could not find visitorData!");
+  if (!visitorData) throw new Error('Could not find visitorData!');
 
   return visitorData;
 };
 
 export default async function getPot({
-  userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+  userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
   requestKey = rk
 }: {
   userAgent?: string,
@@ -57,7 +57,7 @@ export default async function getPot({
     };
     const bgChallenge = await BG.Challenge.create(bgConfig);
 
-    if (!bgChallenge) throw new Error("Unable to create challenge!");
+    if (!bgChallenge) throw new Error('Unable to create challenge!');
 
     const interpreterJavascript = bgChallenge.interpreterJavascript.privateDoNotAccessOrElseSafeScriptWrappedValue;
     if (interpreterJavascript) {

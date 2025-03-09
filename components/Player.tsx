@@ -35,8 +35,17 @@ export default function Player({ src, metadata, playback }: PlayerProps) {
     musicPlayer?.on('timeupdate', () => {
       console.log('timeupdate', musicPlayer?.position, musicPlayer?.duration);
 
-      setPosition(musicPlayer?.position);
-      setDuration(musicPlayer?.duration);
+      if (!musicPlayer) return;
+      setPosition(musicPlayer.position);
+      setDuration(!Number.isNaN(musicPlayer.duration) ? musicPlayer?.duration : 0);
+
+      try {
+        navigator.mediaSession.setPositionState({
+          duration: musicPlayer?.duration,
+          playbackRate: musicPlayer?.playbackRate,
+          position: musicPlayer?.position,
+        });
+      } catch (e) {}
     });
 
     musicPlayer?.on('progress', (e) => {
