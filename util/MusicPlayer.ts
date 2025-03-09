@@ -97,6 +97,32 @@ class MusicPlayer {
     this.events.set(event, callback);
     this.audio.addEventListener(event, (e) => callback(e));
   }
+
+  destroy() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.audio.src = '';
+
+    // @ts-ignore
+    this.audio = null;
+
+    this.context.close();
+    this.source.disconnect();
+    this.gain.disconnect();
+
+    this.player.unload();
+    this.player = null;
+
+    this.events.forEach((callback, event) => this.audio.removeEventListener(event, callback));
+    this.events.clear();
+
+    // @ts-ignore
+    this.context = null;
+    // @ts-ignore
+    this.source = null;
+    // @ts-ignore
+    this.gain = null;
+  }
 }
 
 export default MusicPlayer;

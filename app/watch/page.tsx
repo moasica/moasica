@@ -1,12 +1,14 @@
-import { ChevronDown, Download, Settings, Share2 } from 'lucide-react';
+import { ChevronDown, Download, Home, Settings, Share2 } from 'lucide-react';
 
 import Player from '@/components/Player';
 
-import { Video } from '@/util/interfaces';
+import { NextPlaylist, Video } from '@/util/interfaces';
 
 import Wordmark from '@/public/wordmark.svg';
 
 import styles from '@/styles/Watch.module.scss';
+import UpNext from '@/components/UpNext';
+import PlayerPage from '@/components/PlayerPage';
 
 export default async function Watch({
   searchParams
@@ -16,8 +18,9 @@ export default async function Watch({
   const id = (await searchParams).v as string;
   //const list = (await searchParams).list as string;
 
-  const f = await fetch(`http://localhost:3000/api/v1/video/${id}`);
-  const video: Video = await f.json();
+  const video: Video = await (
+    await fetch(`http://localhost:3000/api/v1/video/${id}`)
+  ).json();
 
   if (!video.playable) {
     return <h1>Video is unplayable!</h1>;
@@ -45,7 +48,7 @@ export default async function Watch({
     >
       <div className={styles.header}>
         <button>
-          <ChevronDown />
+          <Home />
         </button>
 
         <Wordmark className={styles.logo} viewBox="0 0 352 78" />
@@ -65,24 +68,7 @@ export default async function Watch({
         </div>
       </div>
 
-      <div className={styles.player}>
-        <Player
-          src={`/api/v1/video/${id}/dash`}
-          metadata={meta}
-          data={video}
-          playback={video.playback}
-        />
-
-        <div className={styles.content}>
-          <div className={styles.tabs}>
-            <label>Up Next</label>
-
-            <label>Lyrics</label>
-
-            <label>Related</label>
-          </div>
-        </div>
-      </div>
+      <PlayerPage id={id} meta={meta} video={video} />
     </div>
   );
 }

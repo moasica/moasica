@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, Fragment } from 'react';
+import { useEffect, useState, useMemo, Fragment, useRef } from 'react';
 import {
   Pause,
   Play,
@@ -57,9 +57,23 @@ export default function Player({ src, metadata, data, playback }: PlayerProps) {
 
   const [isDragging, setIsDragging] = useState(false);
 
+  const componentWillUnmount = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      componentWillUnmount.current = true;
+    };
+  }, []);
+
   useEffect(() => {
     setMusicPlayer(new MusicPlayer(src, playback));
   }, [src, playback]);
+
+  useEffect(() => {
+    return () => {
+      if (componentWillUnmount.current) musicPlayer?.destroy();
+    };
+  }, [musicPlayer]);
 
   useEffect(() => {
     document.addEventListener('mousemove', (e) => {

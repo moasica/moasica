@@ -48,25 +48,3 @@
     gap: 8px;
   }
 }
-
-.player {
-  height: calc(100svh - (3 * 48px));
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 128px;
-
-  > .content {
-    width: 512px;
-    height: 100%;
-
-    > .tabs {
-      display: flex;
-
-      gap: 16px;
-    }
-  }
-}

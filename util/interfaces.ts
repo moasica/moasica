@@ -17,6 +17,8 @@ export interface Song {
   artist: Artist[];
   album?: Album;
   thumbnail: Thumbnail[];
+
+  current?: boolean;
 }
 
 export interface Playlist {
@@ -58,4 +60,9 @@ export interface Video {
     maxReadAhead: number;
     readAhead: number;
   };
+}
+
+export interface NextPlaylist {
+  videos: Song[];
+  continuation: string;
 }
